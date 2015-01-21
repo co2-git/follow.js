@@ -72,9 +72,15 @@ new Follow(model)
 		console.log('deleted name property', name);
 	});
 
+// will emit "add name" "abc" 
+
 model.name = 'abc';
 
+// will emit "update name" "xyz"
+
 model.name = 'xyz';
+
+// will emit "delete name"
 
 delete model.name;
 ```
