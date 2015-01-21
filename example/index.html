@@ -1,0 +1,128 @@
+<!doctype html>
+<meta charset='utf-8' />
+<table border="1" style="width: 100%">
+	<thead>
+		<tr style="font-weight: bold">
+			<th>Model</th>
+			<td>First value</td>
+			<td>Current value</td>
+      <td>Previous value</td>
+			<td>Change value</td>
+      <td>Poll value</td>
+      <td>Watchers</td>
+		</tr>
+	</thead>
+
+	<tbody>
+		<tr>
+			<th>String</th>
+			<td class="model-string-added"></td>
+			<td class="model-string"></td>
+      <td class="model-string-old"></td>
+			<td><input type="text" name="string" /></td>
+      <td class="model-string-poll"></td>
+		</tr>
+
+    <tr>
+      <th>Number</th>
+      <td class="model-number-added"></td>
+      <td class="model-number"></td>
+      <td class="model-number-old"></td>
+      <td><input type="number" name="number" /></td>
+      <td class="model-number-poll"></td>
+    </tr>
+
+    <tr>
+      <th>Boolean</th>
+      <td class="model-number-added"></td>
+      <td class="model-number"></td>
+      <td class="model-number-old"></td>
+      <td><input type="number" name="number" /></td>
+      <td class="model-number-poll"></td>
+    </tr>
+
+    <tr>
+      <th>Array</th>
+      <td class="model-array-added"></td>
+      <td class="model-array"></td>
+      <td class="model-array-old"></td>
+      <td><input type="text" name="array" /></td>
+      <td class="model-array-poll"></td>
+    </tr>
+
+    <tr>
+      <th>Object</th>
+      <td class="model-number-added"></td>
+      <td class="model-number"></td>
+      <td class="model-number-old"></td>
+      <td><input type="number" name="number" /></td>
+      <td class="model-number-poll"></td>
+    </tr>
+
+	</tbody>
+</table>
+<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+<script src="../dist/follow.js"></script>
+<script>
+
+	var model = {};
+
+	var follower = new Follow(model);
+
+  ['string', 'number', 'array'].forEach(function (prop) {
+    
+    follower.on('add ' + prop, function (value) {
+      $('.model-' + prop + '-added').text(value);
+      $('[name="' + prop + '"]').val(value);
+    });
+
+    follower.on('update ' + prop, function (value, info) {
+      $('.model-' + prop).text(value);
+      $('.model-' + prop + '-old').text(info.old);
+      $('[name="' + prop + '"]').val(value);
+    });
+
+    $('[name="' + prop + '"]').on('keyup', function () {
+      model[prop] = $(this).val();
+    });
+
+    setInterval(function () {
+      $('.model-' + prop + '-poll').text(model[prop]);
+    }, 1000);
+  });
+
+  	
+
+  
+
+
+	// model.string = 'hello';
+
+	// model.set();
+
+	setTimeout(function () {
+		model.string = 'something';
+    model.number = 1;
+    model.array = [1, 2, 3];
+	}, 1000);
+
+  setTimeout(function () {
+    model.string = 'something else';
+    model.number = 2;
+    model.array = [4, 5, 6];
+  }, 2000);
+
+  setTimeout(function () {
+    model.string += 'hello';
+    model.number += 2;
+    model.array[0] = 22;
+  }, 3000);
+
+  setTimeout(function () {
+    model.string += 'hello';
+    model.number ++;
+    model.array[0] = 22;
+  }, 4000);
+
+</script>
+</script>
